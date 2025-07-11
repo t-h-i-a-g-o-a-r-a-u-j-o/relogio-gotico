@@ -1,0 +1,245 @@
+/* ==========================================================================
+   1. IMPORTAÇÕES E VARIÁVEIS GLOBAIS
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Metal+Mania&family=Texturina:wght@400;700&display=swap');
+
+:root {
+    --text-main: #E0E0E0;
+    --text-subtle: #909090;
+    --accent-blood-red: #9a0000;
+    --shadow-dense: rgba(0, 0, 0, 0.8);
+}
+
+/* ==========================================================================
+   2. ESTILOS GERAIS E CAMADAS DE FUNDO
+   ========================================================================== */
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+    font-family: 'Texturina', serif;
+    color: var(--text-main);
+    position: relative;
+    overflow: hidden;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 0l1.12.56L12 3l-1.12-2.44L12 0zm0 24l-1.12-.56L12 21l1.12 2.44L12 24zM0 12l.56-1.12L3 12l-2.44 1.12L0 12zm24 0l-.56 1.12L21 12l2.44-1.12L24 12zM5.46 5.46l.79.79L5.12 7.38l-.79-.79zm13.08 13.08l-.79-.79L18.88 16.62l.79.79zM5.46 18.54l.79-.79L7.38 18.88l-.79.79zM18.54 5.46l-.79.79L16.62 5.12l.79-.79z" fill="%23a0a0ff"/></svg>') 12 12, auto;
+}
+
+.background-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center center;
+    opacity: 0;
+    transition: opacity 2.5s ease-in-out;
+    z-index: -1;
+    filter: brightness(0.7);
+}
+
+.background-layer.visible {
+    opacity: 1;
+}
+
+#bg-noite { background-image: url("imagens/castelo4.jpg"); }
+#bg-amanhecer { background-image: url('imagens/castelo2.jpg'); }
+#bg-dia { background-image: url('imagens/castelo1.jpg'); }
+#bg-pordosol { background-image: url('imagens/castelo3.jpg'); }
+
+
+/* ==========================================================================
+   3. CONTROLES DE TEMPO
+   ========================================================================== */
+.time-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 20;
+    display: flex;
+    gap: 10px;
+}
+
+.time-controls button {
+    font-family: 'Cinzel Decorative', serif;
+    font-weight: 700;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: var(--text-subtle);
+    border: 1px solid var(--text-subtle);
+    border-radius: 5px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(3px);
+}
+
+.time-controls button:hover {
+    background-color: rgba(200, 180, 150, 0.3);
+    color: var(--text-main);
+    border-color: var(--text-main);
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   4. NUVENS E ANIMAÇÕES
+   ========================================================================== */
+#container-nuvens {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    z-index: 1;
+    animation: mover-ceu-de-nuvens 180s linear infinite;
+    animation-play-state: running;
+    transition: filter 1.5s ease;
+}
+
+#container-nuvens.storm-brewing {
+    animation-play-state: paused;
+    filter: brightness(0.6);
+}
+
+.nuvem {
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: blur(4px);
+    opacity: 0.7;
+}
+
+.nuvem-1 { background-image: url('imagens/nuvem1.png'); width: 600px; height: 250px; top: 10%; left: 5%;}
+.nuvem-2 { background-image: url('imagens/nuvem2.png'); width: 450px; height: 200px; top: 20%; left: 65%;}
+.nuvem-3 { background-image: url('imagens/nuvem3.png'); width: 700px; height: 300px; top: 5%; left: 20%;}
+.nuvem-4 { background-image: url('imagens/nuvem4.png'); width: 500px; height: 220px; top: 35%; left: 80%;}
+.nuvem-5 { background-image: url('imagens/nuvem5.png'); width: 650px; height: 280px; top: 25%; left: 40%;}
+.nuvem-6 { background-image: url('imagens/nuvem6.png'); width: 550px; height: 230px; top: 15%; left: 50%;}
+
+@keyframes mover-ceu-de-nuvens {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+/* ==========================================================================
+   5. EFEITO DE RELÂMPAGO
+   ========================================================================== */
+.lightning {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.ray {
+    position: absolute;
+    background: radial-gradient(circle, rgba(200, 200, 255, 0.6) 0%, rgba(200, 200, 255, 0) 60%);
+    opacity: 0;
+    border-radius: 100%;
+}
+
+body.lightning-active .ray {
+    animation: flash 180ms ease-out forwards;
+}
+
+.ray-1 { width: 60vw; height: 60vw; top: 50%; left: 50%; transform: translate(-50%, -70%); animation-duration: 180ms; }
+.ray-2 { width: 2px; height: 80%; top: -10%; left: 45%; transform: rotate(15deg); background: linear-gradient(to bottom, rgba(255,255,255,0), white, rgba(255,255,255,0)); border-radius: 0; animation-duration: 90ms; animation-delay: 20ms; }
+.ray-3 { width: 40vw; height: 40vw; top: 60%; left: 20%; transform: translate(-50%, -50%); animation-duration: 150ms; animation-delay: 40ms; }
+
+@keyframes flash {
+    0% { opacity: 0; }
+    40% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+body.lightning-active {
+    filter: brightness(1.2) contrast(1.1);
+}
+
+body.lightning-active .nuvem {
+    filter: blur(2.5px) brightness(1.15);
+}
+
+/* ==========================================================================
+   6. COMPONENTES DO RELÓGIO
+   ========================================================================== */
+.container {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(150px);
+}
+
+.relogio {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    margin-bottom: -60px;
+}
+
+#hora-minuto {
+    font-family: 'Texturina', serif;
+    font-size: 8em;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text-main);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6), 0 0 15px var(--text-main);
+}
+
+#segundo {
+    font-family: 'Metal Mania', cursive;
+    font-size: 2.8em;
+    margin-left: 15px;
+    color: var(--accent-blood-red);
+    text-shadow: 0 0 4px #fff, 0 0 8px #ff4d4d, 0 0 12px var(--accent-blood-red);
+    animation: slow-fade-pulse 3s infinite alternate;
+}
+
+.data {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.6em;
+    color: var(--text-subtle);
+    text-shadow: 1px 1px 2px var(--shadow-dense);
+}
+
+@keyframes slow-fade-pulse {
+    from { transform: scale(1); opacity: 1; }
+    to   { transform: scale(1.03); opacity: 0.8; }
+}
+
+/* ==========================================================================
+   7. RESPONSIVIDADE
+   ========================================================================== */
+@media (max-width: 768px) {
+    #hora-minuto {
+        font-size: 6em;
+    }
+    #segundo {
+        font-size: 1.8em;
+    }
+    .data {
+        font-size: 1.2em;
+    }
+}
+
+@media (max-width: 480px) {
+    #hora-minuto {
+        font-size: 4em;
+    }
+    #segundo {
+        font-size: 1.2em;
+        margin-left: 10px;
+    }
+    .data {
+        font-size: 1em;
+    }
+}

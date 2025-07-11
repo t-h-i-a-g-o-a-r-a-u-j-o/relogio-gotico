@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Torre da Tempestade</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div id="bg-noite" class="background-layer"></div>
+    <div id="bg-amanhecer" class="background-layer"></div>
+    <div id="bg-dia" class="background-layer"></div>
+    <div id="bg-pordosol" class="background-layer"></div>
+
+    <div id="container-nuvens">
+        <div class="nuvem nuvem-1"></div>
+        <div class="nuvem nuvem-2"></div>
+        <div class="nuvem nuvem-3"></div>
+        <div class="nuvem nuvem-4"></div>
+        <div class="nuvem nuvem-5"></div>
+        <div class="nuvem nuvem-6"></div>
+    </div>
+    
+    <div class="lightning">
+        <div class="ray ray-1"></div>
+        <div class="ray ray-2"></div>
+        <div class="ray ray-3"></div>
+    </div>
+
+    <div class="container">
+        <div class="relogio">
+            <h1 id="hora-minuto">00:00</h1>
+            <span id="segundo">00</span>
+        </div>
+        <div class="data" id="data-atual"></div>
+    </div>
+
+    <div class="time-controls">
+        <button id="advance1hBtn" title="Avançar 1 Hora">+1h</button>
+        <button id="advance6hBtn" title="Avançar 6 Horas">+6h</button>
+        <button id="resetTimeBtn" title="Resetar para Hora Atual"><i class="fas fa-undo"></i></button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
