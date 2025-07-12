@@ -219,7 +219,14 @@ body.lightning-active .nuvem {
 /* ==========================================================================
    7. RESPONSIVIDADE
    ========================================================================== */
+/* --- RESPONSIVIDADE (MEDIA QUERIES) --- */
+
 @media (max-width: 768px) {
+    
+    .container {
+        transform: translateY(0); /* Centraliza o relógio verticalmente em telas menores */
+    }
+
     #hora-minuto {
         font-size: 6em;
     }
