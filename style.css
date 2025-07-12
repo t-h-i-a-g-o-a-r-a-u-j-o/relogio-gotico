@@ -1,6 +1,3 @@
-/* ==========================================================================
-   1. IMPORTAÇÕES E VARIÁVEIS GLOBAIS
-   ========================================================================== */
 @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Metal+Mania&family=Texturina:wght@400;700&display=swap');
 
 :root {
@@ -10,9 +7,6 @@
     --shadow-dense: rgba(0, 0, 0, 0.8);
 }
 
-/* ==========================================================================
-   2. ESTILOS GERAIS E CAMADAS DE FUNDO
-   ========================================================================== */
 body {
     margin: 0;
     height: 100vh;
@@ -50,10 +44,6 @@ body {
 #bg-dia { background-image: url('imagens/castelo1.jpg'); }
 #bg-pordosol { background-image: url('imagens/castelo3.jpg'); }
 
-
-/* ==========================================================================
-   3. CONTROLES DE TEMPO
-   ========================================================================== */
 .time-controls {
     position: absolute;
     bottom: 20px;
@@ -83,9 +73,6 @@ body {
     transform: translateY(-2px);
 }
 
-/* ==========================================================================
-   4. NUVENS E ANIMAÇÕES
-   ========================================================================== */
 #container-nuvens {
     position: absolute;
     top: 0;
@@ -124,9 +111,6 @@ body {
     to { transform: translateX(-50%); }
 }
 
-/* ==========================================================================
-   5. EFEITO DE RELÂMPAGO
-   ========================================================================== */
 .lightning {
     position: absolute;
     top: 0;
@@ -166,9 +150,6 @@ body.lightning-active .nuvem {
     filter: blur(2.5px) brightness(1.15);
 }
 
-/* ==========================================================================
-   6. COMPONENTES DO RELÓGIO
-   ========================================================================== */
 .container {
     position: relative;
     z-index: 10;
@@ -217,36 +198,70 @@ body.lightning-active .nuvem {
 }
 
 /* ==========================================================================
-   7. RESPONSIVIDADE
+   RESPONSIVIDADE
    ========================================================================== */
-/* --- RESPONSIVIDADE (MEDIA QUERIES) --- */
-
 @media (max-width: 768px) {
-    
     .container {
-        transform: translateY(0); /* Centraliza o relógio verticalmente em telas menores */
+        transform: translateY(0);
+        padding: 20px;
+    }
+
+    .time-controls {
+        flex-direction: column;
+        right: 10px;
+        bottom: 10px;
+        gap: 5px;
+    }
+
+    .time-controls button {
+        padding: 6px 10px;
+        font-size: 0.9em;
+    }
+
+    .nuvem {
+        filter: blur(2px);
+        opacity: 0.5;
+    }
+
+    #container-nuvens {
+        width: 250%;
     }
 
     #hora-minuto {
         font-size: 6em;
     }
+
     #segundo {
         font-size: 1.8em;
+        margin-left: 12px;
     }
+
     .data {
         font-size: 1.2em;
     }
 }
 
 @media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+
     #hora-minuto {
         font-size: 4em;
     }
+
     #segundo {
         font-size: 1.2em;
-        margin-left: 10px;
+        margin-left: 8px;
     }
+
     .data {
         font-size: 1em;
+        text-align: center;
+    }
+
+    .time-controls button {
+        padding: 5px 8px;
+        font-size: 0.8em;
     }
 }
