@@ -199,3 +199,67 @@ body.lightning-active .ray {
     40% { opacity: 1; }
     100% { opacity: 0; }
 }
+/* ============================
+   RESPONSIVIDADE POR BREAKPOINT
+============================ */
+
+/* DESKTOP GRANDE */
+@media (min-width: 1025px) {
+    #hora-minuto {
+        font-size: 8rem;
+    }
+    #segundo {
+        font-size: 3rem;
+        margin-left: 15px;
+    }
+    .data {
+        font-size: 2rem;
+    }
+
+    .time-controls button {
+        font-size: 1rem;
+        padding: 10px 14px;
+    }
+}
+
+/* TABLET / DESKTOP PEQUENO */
+@media (min-width: 768px) and (max-width: 1024px) {
+    #hora-minuto {
+        font-size: 6rem;
+    }
+    #segundo {
+        font-size: 2rem;
+    }
+    .data {
+        font-size: 1.5rem;
+    }
+
+    .time-controls button {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+    }
+}
+
+/* CELULARES */
+@media (max-width: 767px) {
+    #hora-minuto {
+        font-size: 12vw;
+    }
+    #segundo {
+        font-size: 6vw;
+    }
+    .data {
+        font-size: 5vw;
+    }
+
+    .time-controls {
+        right: 10px;
+        bottom: 10px;
+        flex-direction: column;
+    }
+
+    .time-controls button {
+        font-size: 4vw;
+        padding: 6px 10px;
+    }
+}
