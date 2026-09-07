@@ -6,7 +6,7 @@ O cenário se transforma de acordo com o horário e com as condições climátic
 
 ## 🚀 Projeto online
 
-⚡ [Clique aqui para acessar A Torre da Tempestade](LINK_CONFIRMADO_DO_GITHUB_PAGES)
+⚡ [Clique aqui para acessar A Torre da Tempestade](https://t-h-i-a-g-o-a-r-a-u-j-o.github.io/relogio-gotico/)
 
 ## 🌩️ Funcionalidades
 
