@@ -1,47 +1,350 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta
+      name="description"
+      content="Relógio gótico interativo com clima local, ciclo do dia, nuvens, chuva e relâmpagos."
+    />
+
     <title>A Torre da Tempestade</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
-    <div id="bg-noite" class="background-layer"></div>
-    <div id="bg-amanhecer" class="background-layer"></div>
-    <div id="bg-dia" class="background-layer"></div>
-    <div id="bg-pordosol" class="background-layer"></div>
 
-    <div id="container-nuvens">
-        <div class="nuvem nuvem-1"></div>
-        <div class="nuvem nuvem-2"></div>
-        <div class="nuvem nuvem-3"></div>
-        <div class="nuvem nuvem-4"></div>
-        <div class="nuvem nuvem-5"></div>
-        <div class="nuvem nuvem-6"></div>
-    </div>
-    
-    <div class="lightning">
-        <div class="ray ray-1"></div>
-        <div class="ray ray-2"></div>
-        <div class="ray ray-3"></div>
-    </div>
+    <link rel="stylesheet" href="style.css" />
 
-    <div class="container">
-        <div class="relogio">
-            <h1 id="hora-minuto">00:00</h1>
-            <span id="segundo">00</span>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <!-- =====================================================
+       FUNDOS DO CICLO DO DIA
+  ====================================================== -->
+
+    <div id="bg-noite" class="background-layer" aria-hidden="true"></div>
+
+    <div id="bg-amanhecer" class="background-layer" aria-hidden="true"></div>
+
+    <div id="bg-dia" class="background-layer" aria-hidden="true"></div>
+
+    <div id="bg-pordosol" class="background-layer" aria-hidden="true"></div>
+
+    <!-- =====================================================
+       ATMOSFERA
+  ====================================================== -->
+
+    <div id="atmosfera" class="atmosfera" aria-hidden="true"></div>
+
+    <!-- =====================================================
+       NUVENS
+  ====================================================== -->
+
+    <div id="container-nuvens" class="cloud-layer" aria-hidden="true"></div>
+
+    <!-- =====================================================
+       CHUVA
+  ====================================================== -->
+
+    <div id="rain-layer" class="rain-layer" aria-hidden="true"></div>
+
+    <!-- =====================================================
+       CLARÃO DO RELÂMPAGO
+  ====================================================== -->
+
+    <div id="lightning-flash" class="lightning-flash" aria-hidden="true"></div>
+
+    <!-- =====================================================
+       RAIO SVG
+  ====================================================== -->
+
+    <svg
+      id="lightning-svg"
+      class="lightning-svg"
+      viewBox="0 0 1000 700"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <polyline id="lightning-main" class="lightning-bolt" points=""></polyline>
+
+      <polyline
+        id="lightning-branch-1"
+        class="lightning-branch"
+        points=""
+      ></polyline>
+
+      <polyline
+        id="lightning-branch-2"
+        class="lightning-branch"
+        points=""
+      ></polyline>
+    </svg>
+
+    <!-- =====================================================
+       INTERFACE
+  ====================================================== -->
+
+    <main class="interface">
+      <!-- ===================================================
+         TOPO
+    ==================================================== -->
+
+      <header class="top-panel">
+        <div class="titulo-area">
+          <p class="eyebrow">Relógio atmosférico interativo</p>
+
+          <h1>A Torre da Tempestade</h1>
+
+          <p class="frase">O tempo muda. A torre permanece.</p>
         </div>
-        <div class="data" id="data-atual"></div>
-    </div>
 
-    <div class="time-controls">
-        <button id="advance1hBtn" title="Avançar 1 Hora">+1h</button>
-        <button id="advance6hBtn" title="Avançar 6 Horas">+6h</button>
-        <button id="resetTimeBtn" title="Resetar para Hora Atual"><i class="fas fa-undo"></i></button>
-    </div>
+        <div class="top-actions">
+          <section class="weather-card" aria-label="Clima atual">
+            <div class="weather-icon">
+              <i id="weather-icon" class="fa-solid fa-cloud"></i>
+            </div>
+
+            <div class="weather-info">
+              <p id="location-name" class="location-name">Localizando...</p>
+
+              <div class="weather-main">
+                <span id="temperature" class="temperature"> --° </span>
+
+                <span id="weather-description" class="weather-description">
+                  Carregando clima
+                </span>
+              </div>
+
+              <p id="weather-extra" class="weather-extra">Aguarde...</p>
+            </div>
+          </section>
+
+          <button
+            id="demoToggleBtn"
+            class="demo-toggle-btn"
+            type="button"
+            aria-expanded="false"
+            aria-controls="demoPanel"
+          >
+            <i class="fa-solid fa-flask"></i>
+
+            <span> Demonstração </span>
+          </button>
+        </div>
+      </header>
+
+      <!-- ===================================================
+         RELÓGIO
+    ==================================================== -->
+
+      <section class="clock-section" aria-label="Relógio">
+        <div class="relogio">
+          <span id="hora-minuto" class="hora-minuto"> 00:00 </span>
+
+          <span id="segundo" class="segundo"> 00 </span>
+        </div>
+
+        <p id="data-atual" class="data-atual">Carregando data...</p>
+
+        <p id="atmosphere-message" class="atmosphere-message">
+          A torre desperta...
+        </p>
+      </section>
+
+      <!-- ===================================================
+         CONTROLES DE HORÁRIO
+    ==================================================== -->
+
+      <section class="controls" aria-label="Controles de simulação de horário">
+        <button
+          id="advance1hBtn"
+          class="control-btn"
+          type="button"
+          title="Avançar uma hora"
+        >
+          <span class="control-icon">
+            <i class="fa-solid fa-forward-step"></i>
+          </span>
+
+          <span class="control-text">
+            <strong> +1h </strong>
+
+            <small> Avançar 1 hora </small>
+          </span>
+        </button>
+
+        <button
+          id="advance6hBtn"
+          class="control-btn"
+          type="button"
+          title="Avançar seis horas"
+        >
+          <span class="control-icon">
+            <i class="fa-solid fa-forward-fast"></i>
+          </span>
+
+          <span class="control-text">
+            <strong> +6h </strong>
+
+            <small> Avançar 6 horas </small>
+          </span>
+        </button>
+
+        <button
+          id="resetTimeBtn"
+          class="control-btn"
+          type="button"
+          title="Voltar ao horário atual"
+        >
+          <span class="control-icon">
+            <i class="fa-solid fa-rotate-left"></i>
+          </span>
+
+          <span class="control-text">
+            <strong> Agora </strong>
+
+            <small> Hora atual </small>
+          </span>
+        </button>
+      </section>
+
+      <!-- ===================================================
+         PAINEL DE DEMONSTRAÇÃO
+    ==================================================== -->
+
+      <section
+        id="demoPanel"
+        class="demo-panel"
+        aria-label="Modo demonstração"
+        hidden
+      >
+        <div class="demo-header">
+          <div>
+            <p class="demo-eyebrow">Modo demonstração</p>
+
+            <h2>Teste a atmosfera da torre</h2>
+          </div>
+
+          <button
+            id="closeDemoBtn"
+            class="demo-close-btn"
+            type="button"
+            aria-label="Fechar modo demonstração"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <p class="demo-description">
+          Force uma condição climática para visualizar todas as animações do
+          projeto.
+        </p>
+
+        <div class="demo-options">
+          <button class="demo-weather-btn" type="button" data-weather="clear">
+            <i class="fa-solid fa-sun"></i>
+
+            <span> Limpo </span>
+          </button>
+
+          <button class="demo-weather-btn" type="button" data-weather="cloudy">
+            <i class="fa-solid fa-cloud"></i>
+
+            <span> Nublado </span>
+          </button>
+
+          <button class="demo-weather-btn" type="button" data-weather="rain">
+            <i class="fa-solid fa-cloud-rain"></i>
+
+            <span> Chuva </span>
+          </button>
+
+          <button class="demo-weather-btn" type="button" data-weather="storm">
+            <i class="fa-solid fa-cloud-bolt"></i>
+
+            <span> Tempestade </span>
+          </button>
+        </div>
+
+        <div class="demo-footer">
+          <p id="demoStatus" class="demo-status">Clima real ativo</p>
+
+          <button
+            id="returnRealWeatherBtn"
+            class="real-weather-btn"
+            type="button"
+          >
+            <i class="fa-solid fa-location-crosshairs"></i>
+
+            Voltar ao clima real
+          </button>
+        </div>
+      </section>
+
+      <!-- ===================================================
+         STATUS
+    ==================================================== -->
+
+      <section class="status-bar">
+        <div class="status-item">
+          <i class="fa-solid fa-clock"></i>
+
+          <span>
+            <strong> Ciclo: </strong>
+
+            <span id="day-period"> -- </span>
+          </span>
+        </div>
+
+        <div class="status-item">
+          <i class="fa-solid fa-cloud"></i>
+
+          <span>
+            <strong> Clima: </strong>
+
+            <span id="weather-status"> -- </span>
+          </span>
+        </div>
+
+        <div class="status-item">
+          <i class="fa-solid fa-location-dot"></i>
+
+          <span>
+            <strong> Fonte: </strong>
+
+            <span id="location-status"> procurando localização </span>
+          </span>
+        </div>
+
+        <div id="modeStatusItem" class="status-item">
+          <i class="fa-solid fa-satellite-dish"></i>
+
+          <span>
+            <strong> Modo: </strong>
+
+            <span id="mode-status"> Real </span>
+          </span>
+        </div>
+      </section>
+    </main>
+
+    <!-- =====================================================
+       RODAPÉ
+  ====================================================== -->
+
+    <footer class="footer">
+      <p>
+        A Torre da Tempestade
+        <span>•</span>
+        clima e tempo em movimento
+      </p>
+
+      <p>Desenvolvido por Thiago Araujo</p>
+    </footer>
 
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
