@@ -1,265 +1,1461 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Metal+Mania&family=Texturina:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Metal+Mania&family=Texturina:wght@400;500;600&display=swap");
 
 :root {
-    --text-main: #E0E0E0;
-    --text-subtle: #909090;
-    --accent-blood-red: #9a0000;
-    --shadow-dense: rgba(0, 0, 0, 0.8);
+  --bg-deep: #05070d;
+  --panel: rgba(8, 11, 18, 0.58);
+  --panel-strong: rgba(8, 11, 18, 0.8);
+
+  --text-main: #f1eee7;
+  --text-soft: #b9b3a8;
+  --text-muted: #8f8a82;
+
+  --accent: #9d0b12;
+  --accent-light: #d9464d;
+
+  --border: rgba(220, 214, 199, 0.18);
+  --border-strong: rgba(220, 214, 199, 0.36);
+
+  --shadow: 0 14px 40px rgba(0, 0, 0, 0.42);
 }
 
+/* =========================================================
+   RESET
+========================================================= */
+
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  border: none;
 }
 
 body {
-    height: 100vh;
-    width: 100vw;
-    background-color: #000;
-    font-family: 'Texturina', serif;
-    color: var(--text-main);
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  min-height: 100vh;
+
+  position: relative;
+
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+
+  color: var(--text-main);
+
+  background: var(--bg-deep);
+
+  font-family: "Texturina", serif;
 }
 
+/* =========================================================
+   FUNDOS
+========================================================= */
+
 .background-layer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-size: cover;
-    background-position: center;
-    opacity: 0;
-    transition: opacity 2.5s ease-in-out;
-    z-index: -1;
-    filter: brightness(0.7);
+  position: fixed;
+
+  inset: 0;
+
+  z-index: -10;
+
+  opacity: 0;
+
+  background-size: cover;
+  background-position: center;
+
+  transition:
+    opacity 2s ease,
+    filter 1.5s ease,
+    transform 8s ease;
+
+  transform: scale(1.01);
+
+  filter: brightness(0.8) saturate(0.95);
 }
 
 .background-layer.visible {
+  opacity: 1;
+}
+
+#bg-amanhecer {
+  background-image: url("imagens/castelo-amanhecer.jpg");
+}
+
+#bg-dia {
+  background-image: url("imagens/castelo-dia.jpg");
+}
+
+#bg-pordosol {
+  background-image: url("imagens/castelo-pordosol.jpg");
+}
+
+#bg-noite {
+  background-image: url("imagens/castelo-noite.jpg");
+}
+
+/* =========================================================
+   ATMOSFERA
+========================================================= */
+
+.atmosfera {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1;
+
+  pointer-events: none;
+
+  background: radial-gradient(
+    circle at center,
+    transparent 25%,
+    rgba(0, 0, 0, 0.12) 70%,
+    rgba(0, 0, 0, 0.34) 100%
+  );
+
+  transition:
+    background 1.5s ease,
+    opacity 1.5s ease;
+}
+
+body.weather-clear .atmosfera {
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 220, 170, 0.03),
+    rgba(0, 0, 0, 0.08) 70%,
+    rgba(0, 0, 0, 0.25) 100%
+  );
+}
+
+body.weather-cloudy .atmosfera {
+  background:
+    linear-gradient(rgba(20, 25, 35, 0.12), rgba(6, 8, 14, 0.22)),
+    radial-gradient(circle at center, transparent 18%, rgba(0, 0, 0, 0.3) 100%);
+}
+
+body.weather-rain .atmosfera,
+body.weather-storm .atmosfera {
+  background:
+    linear-gradient(rgba(10, 15, 25, 0.22), rgba(0, 0, 0, 0.48)),
+    radial-gradient(circle at center, transparent 12%, rgba(0, 0, 0, 0.4) 100%);
+}
+
+body.period-night .atmosfera {
+  background:
+    linear-gradient(rgba(5, 10, 22, 0.12), rgba(0, 0, 0, 0.48)),
+    radial-gradient(circle at center, transparent 12%, rgba(0, 0, 0, 0.42) 100%);
+}
+
+/* =========================================================
+   NUVENS
+========================================================= */
+
+.cloud-layer {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 2;
+
+  overflow: hidden;
+
+  pointer-events: none;
+}
+
+.cloud {
+  position: absolute;
+
+  left: -60vw;
+
+  width: 42vw;
+  min-width: 420px;
+
+  /*
+    IMPORTANTE:
+    Como a nuvem é uma DIV vazia com imagem de fundo,
+    ela precisa de altura.
+  */
+  aspect-ratio: 2.4 / 1;
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  opacity: 0.42;
+
+  filter: blur(0.3px) drop-shadow(0 14px 20px rgba(0, 0, 0, 0.28));
+
+  will-change: transform;
+
+  animation-name: moverNuvem;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.cloud.light {
+  background-image: url("imagens/nuvem-leve.png");
+}
+
+.cloud.heavy {
+  background-image: url("imagens/nuvem-pesada.png");
+}
+
+.cloud.storm {
+  background-image: url("imagens/nuvem-tempestade.png");
+}
+
+/* =========================================================
+   INTENSIDADE DAS NUVENS
+========================================================= */
+
+body.weather-clear .cloud {
+  opacity: 0.25;
+}
+
+body.weather-cloudy .cloud {
+  opacity: 0.48;
+}
+
+body.weather-rain .cloud {
+  opacity: 0.58;
+}
+
+body.weather-storm .cloud {
+  opacity: 0.72;
+}
+
+body.period-night .cloud {
+  opacity: 0.55;
+}
+
+body.period-night.weather-storm .cloud {
+  opacity: 0.8;
+}
+
+/* =========================================================
+   MOVIMENTO DAS NUVENS
+========================================================= */
+
+@keyframes moverNuvem {
+  from {
+    transform: translateX(-10vw) scale(var(--scale, 1));
+  }
+
+  to {
+    transform: translateX(180vw) scale(var(--scale, 1));
+  }
+}
+
+/* =========================================================
+   CHUVA
+========================================================= */
+
+.rain-layer {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 3;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  opacity: 0;
+
+  transition: opacity 0.8s ease;
+}
+
+body.weather-rain .rain-layer,
+body.weather-storm .rain-layer {
+  opacity: 1;
+}
+
+.raindrop {
+  position: absolute;
+
+  top: -12vh;
+
+  width: 1px;
+  height: var(--rain-size, 16vh);
+
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0),
+    rgba(190, 215, 235, 0.62)
+  );
+
+  opacity: var(--rain-opacity, 0.4);
+
+  transform: rotate(12deg);
+
+  animation: cairChuva var(--rain-speed, 0.8s) linear infinite;
+
+  animation-delay: var(--rain-delay, 0s);
+}
+
+@keyframes cairChuva {
+  from {
+    transform: translate3d(0, -15vh, 0) rotate(12deg);
+  }
+
+  to {
+    transform: translate3d(-12vw, 120vh, 0) rotate(12deg);
+  }
+}
+
+/* =========================================================
+   CLARÃO DO RELÂMPAGO
+========================================================= */
+
+.lightning-flash {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 20;
+
+  pointer-events: none;
+
+  opacity: 0;
+
+  background: rgba(215, 225, 255, 0.42);
+
+  mix-blend-mode: screen;
+}
+
+.lightning-flash.flash {
+  animation: flashTela 480ms ease-out;
+}
+
+@keyframes flashTela {
+  0% {
+    opacity: 0;
+  }
+
+  8% {
+    opacity: 0.7;
+  }
+
+  18% {
+    opacity: 0.08;
+  }
+
+  30% {
+    opacity: 0.9;
+  }
+
+  48% {
+    opacity: 0.14;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/* =========================================================
+   RAIO SVG
+========================================================= */
+
+.lightning-svg {
+  position: fixed;
+
+  inset: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  z-index: 19;
+
+  pointer-events: none;
+
+  overflow: visible;
+}
+
+.lightning-bolt,
+.lightning-branch {
+  fill: none;
+
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  opacity: 0;
+
+  filter: drop-shadow(0 0 8px rgba(205, 220, 255, 0.95))
+    drop-shadow(0 0 18px rgba(120, 160, 255, 0.75));
+}
+
+.lightning-bolt {
+  stroke: rgba(235, 245, 255, 1);
+  stroke-width: 4;
+}
+
+.lightning-branch {
+  stroke: rgba(210, 225, 255, 0.9);
+  stroke-width: 2;
+}
+
+.lightning-svg.active .lightning-bolt {
+  animation: raioPrincipal 420ms ease-out;
+}
+
+.lightning-svg.active .lightning-branch {
+  animation: raioRamo 340ms ease-out;
+}
+
+@keyframes raioPrincipal {
+  0% {
+    opacity: 0;
+  }
+
+  8% {
     opacity: 1;
+  }
+
+  30% {
+    opacity: 0.15;
+  }
+
+  42% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
 
-#bg-noite { background-image: url("imagens/castelo4.jpg"); }
-#bg-amanhecer { background-image: url("imagens/castelo2.jpg"); }
-#bg-dia { background-image: url("imagens/castelo1.jpg"); }
-#bg-pordosol { background-image: url("imagens/castelo3.jpg"); }
+@keyframes raioRamo {
+  0% {
+    opacity: 0;
+  }
 
-.container {
-    text-align: center;
-    z-index: 10;
-    padding: 20px;
+  12% {
+    opacity: 0.85;
+  }
+
+  55% {
+    opacity: 0.35;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
 
-#hora-minuto {
-    font-size: 12vw;
-    font-weight: bold;
-    text-shadow: 1px 1px 3px #000, 0 0 15px var(--text-main);
+/* =========================================================
+   INTERFACE
+========================================================= */
+
+.interface {
+  position: relative;
+
+  z-index: 10;
+
+  width: min(90%, 1240px);
+
+  min-height: calc(100vh - 58px);
+
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: space-between;
+
+  padding: 20px 0 14px;
 }
 
-#segundo {
-    font-size: 6vw;
-    color: var(--accent-blood-red);
-    margin-left: 10px;
-    display: inline-block;
-    text-shadow: 0 0 4px #fff, 0 0 8px #ff4d4d;
+/* =========================================================
+   TOPO
+========================================================= */
+
+.top-panel {
+  width: 100%;
+
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 22px;
 }
 
-.data {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 5vw;
-    color: var(--text-subtle);
-    text-shadow: 1px 1px 2px var(--shadow-dense);
-    margin-top: 10px;
+.top-actions {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 9px;
+}
+
+/* =========================================================
+   TÍTULO
+========================================================= */
+
+.titulo-area {
+  max-width: 410px;
+
+  padding: 16px 20px;
+
+  background: linear-gradient(
+    135deg,
+    rgba(5, 7, 12, 0.68),
+    rgba(5, 7, 12, 0.38)
+  );
+
+  border: 1px solid var(--border);
+
+  border-radius: 12px;
+
+  box-shadow: var(--shadow);
+
+  backdrop-filter: blur(7px);
+}
+
+.eyebrow {
+  margin-bottom: 5px;
+
+  color: var(--text-muted);
+
+  font-family: "Cinzel", serif;
+
+  font-size: 0.62rem;
+  font-weight: 600;
+
+  letter-spacing: 0.16em;
+
+  text-transform: uppercase;
+}
+
+.titulo-area h1 {
+  font-family: "Metal Mania", cursive;
+
+  font-size: clamp(1.9rem, 2.7vw, 3.4rem);
+
+  font-weight: 400;
+
+  line-height: 0.98;
+
+  letter-spacing: 0.01em;
+
+  text-shadow:
+    0 2px 2px #000,
+    0 0 16px rgba(255, 255, 255, 0.16);
+}
+
+.frase {
+  margin-top: 10px;
+
+  color: var(--text-soft);
+
+  font-size: 0.84rem;
+}
+
+/* =========================================================
+   CLIMA
+========================================================= */
+
+.weather-card {
+  min-width: 235px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 12px 15px;
+
+  background: linear-gradient(135deg, rgba(5, 7, 12, 0.7), rgba(5, 7, 12, 0.4));
+
+  border: 1px solid var(--border);
+
+  border-radius: 12px;
+
+  box-shadow: var(--shadow);
+
+  backdrop-filter: blur(7px);
+}
+
+.weather-icon {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: grid;
+
+  place-items: center;
+
+  font-size: 1.55rem;
+
+  color: #dce4ef;
+}
+
+.location-name {
+  margin-bottom: 2px;
+
+  color: var(--text-soft);
+
+  font-family: "Cinzel", serif;
+
+  font-size: 0.68rem;
+}
+
+.weather-main {
+  display: flex;
+
+  align-items: baseline;
+
+  gap: 6px;
+}
+
+.temperature {
+  font-family: "Cinzel", serif;
+
+  font-size: 1.35rem;
+
+  font-weight: 700;
+}
+
+.weather-description {
+  color: var(--text-soft);
+
+  font-size: 0.78rem;
+}
+
+.weather-extra {
+  margin-top: 2px;
+
+  color: var(--text-muted);
+
+  font-size: 0.66rem;
+}
+
+/* =========================================================
+   BOTÃO DEMONSTRAÇÃO
+========================================================= */
+
+.demo-toggle-btn {
+  height: 47px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 0 13px;
+
+  color: var(--text-soft);
+
+  background: rgba(5, 7, 12, 0.68);
+
+  border: 1px solid var(--border);
+
+  border-radius: 10px;
+
+  box-shadow: 0 9px 24px rgba(0, 0, 0, 0.25);
+
+  cursor: pointer;
+
+  backdrop-filter: blur(7px);
+
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.demo-toggle-btn:hover {
+  transform: translateY(-2px);
+
+  color: var(--text-main);
+
+  border-color: var(--border-strong);
+
+  background: rgba(15, 18, 27, 0.78);
+}
+
+.demo-toggle-btn.active {
+  color: var(--accent-light);
+
+  border-color: rgba(217, 70, 77, 0.42);
+
+  background: rgba(75, 10, 14, 0.42);
+}
+
+/* =========================================================
+   RELÓGIO
+========================================================= */
+
+.clock-section {
+  width: 100%;
+
+  text-align: center;
+
+  align-self: center;
 }
 
 .relogio {
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
+  display: flex;
+
+  align-items: baseline;
+  justify-content: center;
+
+  gap: 10px;
+
+  line-height: 1;
 }
 
-.time-controls {
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
-    z-index: 20;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.hora-minuto {
+  font-family: "Cinzel", serif;
+
+  font-size: clamp(4.2rem, 8vw, 8rem);
+
+  font-weight: 700;
+
+  letter-spacing: -0.05em;
+
+  text-shadow:
+    0 4px 5px rgba(0, 0, 0, 0.85),
+    0 0 24px rgba(255, 255, 255, 0.1);
 }
 
-.time-controls button {
-    font-family: 'Cinzel Decorative', serif;
-    background: rgba(0, 0, 0, 0.5);
-    color: var(--text-subtle);
-    border: 1px solid var(--text-subtle);
-    border-radius: 5px;
-    padding: 8px;
-    font-size: 4vw;
-    cursor: pointer;
-    backdrop-filter: blur(3px);
-    transition: all 0.3s ease;
+.segundo {
+  font-family: "Metal Mania", cursive;
+
+  font-size: clamp(2rem, 3.6vw, 3.8rem);
+
+  color: var(--accent-light);
+
+  text-shadow:
+    0 3px 3px #000,
+    0 0 14px rgba(217, 70, 77, 0.55);
 }
 
-.time-controls button:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--text-main);
-    border-color: var(--text-main);
+.data-atual {
+  margin-top: 7px;
+
+  font-family: "Cinzel", serif;
+
+  font-size: clamp(0.9rem, 1.5vw, 1.25rem);
+
+  color: var(--text-soft);
+
+  text-shadow: 0 2px 3px #000;
 }
 
-#container-nuvens {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 200%;
-    height: 100%;
-    animation: mover-ceu-de-nuvens 180s linear infinite;
-    transition: filter 1.5s ease;
-    z-index: 1;
+.atmosphere-message {
+  width: fit-content;
+
+  margin: 14px auto 0;
+
+  padding: 7px 14px;
+
+  color: var(--text-soft);
+
+  background: rgba(0, 0, 0, 0.28);
+
+  border: 1px solid var(--border);
+
+  border-radius: 999px;
+
+  font-size: 0.8rem;
+
+  font-style: italic;
+
+  backdrop-filter: blur(5px);
 }
 
-.nuvem {
-    position: absolute;
-    background-size: contain;
-    background-repeat: no-repeat;
-    opacity: 0.6;
-    filter: blur(3px);
+/* =========================================================
+   CONTROLES DE HORA
+========================================================= */
+
+.controls {
+  width: min(650px, 100%);
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 10px;
 }
 
-.nuvem-1 { background-image: url("imagens/nuvem1.png"); width: 50vw; height: 25vw; top: 10%; left: 5%; }
-.nuvem-2 { background-image: url("imagens/nuvem2.png"); width: 40vw; height: 20vw; top: 20%; left: 60%; }
-.nuvem-3 { background-image: url("imagens/nuvem3.png"); width: 60vw; height: 30vw; top: 5%; left: 25%; }
-.nuvem-4 { background-image: url("imagens/nuvem4.png"); width: 45vw; height: 22vw; top: 35%; left: 75%; }
-.nuvem-5 { background-image: url("imagens/nuvem5.png"); width: 55vw; height: 28vw; top: 25%; left: 40%; }
-.nuvem-6 { background-image: url("imagens/nuvem6.png"); width: 50vw; height: 23vw; top: 15%; left: 50%; }
+.control-btn {
+  min-height: 58px;
 
-@keyframes mover-ceu-de-nuvens {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 9px 12px;
+
+  color: var(--text-main);
+
+  background: linear-gradient(
+    180deg,
+    rgba(8, 11, 18, 0.66),
+    rgba(5, 7, 12, 0.8)
+  );
+
+  border: 1px solid var(--border);
+
+  border-radius: 10px;
+
+  box-shadow: 0 9px 24px rgba(0, 0, 0, 0.25);
+
+  cursor: pointer;
+
+  backdrop-filter: blur(7px);
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
 }
 
-.lightning {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 5;
+.control-btn:hover {
+  transform: translateY(-2px);
+
+  border-color: var(--border-strong);
+
+  background: linear-gradient(
+    180deg,
+    rgba(20, 22, 30, 0.72),
+    rgba(7, 9, 15, 0.86)
+  );
 }
 
-.ray {
-    position: absolute;
+.control-icon {
+  width: 31px;
+  height: 31px;
+
+  display: grid;
+
+  place-items: center;
+
+  flex-shrink: 0;
+
+  color: var(--text-soft);
+
+  border: 1px solid var(--border);
+
+  border-radius: 50%;
+
+  font-size: 0.78rem;
+}
+
+.control-text {
+  display: flex;
+
+  flex-direction: column;
+
+  text-align: left;
+}
+
+.control-text strong {
+  font-family: "Cinzel", serif;
+
+  font-size: 0.86rem;
+}
+
+.control-text small {
+  margin-top: 1px;
+
+  color: var(--text-muted);
+
+  font-size: 0.62rem;
+}
+
+/* =========================================================
+   PAINEL DE DEMONSTRAÇÃO
+========================================================= */
+
+.demo-panel {
+  position: fixed;
+
+  top: 50%;
+  right: 4%;
+
+  z-index: 40;
+
+  width: min(360px, 92vw);
+
+  padding: 18px;
+
+  transform: translateY(-50%);
+
+  color: var(--text-main);
+
+  background: linear-gradient(
+    145deg,
+    rgba(5, 7, 13, 0.93),
+    rgba(12, 14, 22, 0.86)
+  );
+
+  border: 1px solid var(--border-strong);
+
+  border-radius: 14px;
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.62);
+
+  backdrop-filter: blur(14px);
+
+  animation: abrirPainelDemo 0.28s ease-out;
+}
+
+.demo-panel[hidden] {
+  display: none;
+}
+
+@keyframes abrirPainelDemo {
+  from {
     opacity: 0;
-    border-radius: 100%;
+
+    transform: translateY(-46%) translateX(20px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(-50%) translateX(0);
+  }
 }
 
-body.lightning-active .ray {
-    animation: flash 180ms ease-out forwards;
+.demo-header {
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 15px;
 }
 
-.ray-1 {
-    width: 60vw;
-    height: 60vw;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -70%);
-    background: radial-gradient(circle, rgba(200, 200, 255, 0.6) 0%, rgba(200, 200, 255, 0) 60%);
+.demo-eyebrow {
+  margin-bottom: 4px;
+
+  color: var(--accent-light);
+
+  font-family: "Cinzel", serif;
+
+  font-size: 0.58rem;
+  font-weight: 700;
+
+  letter-spacing: 0.15em;
+
+  text-transform: uppercase;
 }
 
-.ray-2 {
-    width: 2px;
-    height: 80%;
-    top: -10%;
-    left: 45%;
-    transform: rotate(15deg);
-    background: linear-gradient(to bottom, rgba(255,255,255,0), white, rgba(255,255,255,0));
-    border-radius: 0;
-    animation-delay: 20ms;
+.demo-header h2 {
+  font-family: "Cinzel", serif;
+
+  font-size: 1rem;
+  font-weight: 600;
+
+  line-height: 1.3;
 }
 
-.ray-3 {
-    width: 40vw;
-    height: 40vw;
-    top: 60%;
-    left: 20%;
-    transform: translate(-50%, -50%);
-    background: radial-gradient(circle, rgba(200, 200, 255, 0.6) 0%, rgba(200, 200, 255, 0) 60%);
-    animation-delay: 40ms;
+.demo-close-btn {
+  width: 31px;
+  height: 31px;
+
+  flex-shrink: 0;
+
+  display: grid;
+
+  place-items: center;
+
+  color: var(--text-soft);
+
+  background: rgba(255, 255, 255, 0.04);
+
+  border: 1px solid var(--border);
+
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
-@keyframes flash {
-    0% { opacity: 0; }
-    40% { opacity: 1; }
-    100% { opacity: 0; }
-}
-/* ============================
-   RESPONSIVIDADE POR BREAKPOINT
-============================ */
+.demo-close-btn:hover {
+  color: var(--text-main);
 
-/* DESKTOP GRANDE */
-@media (min-width: 1025px) {
-    #hora-minuto {
-        font-size: 8rem;
-    }
-    #segundo {
-        font-size: 3rem;
-        margin-left: 15px;
-    }
-    .data {
-        font-size: 2rem;
-    }
+  background: rgba(255, 255, 255, 0.09);
 
-    .time-controls button {
-        font-size: 1rem;
-        padding: 10px 14px;
-    }
+  transform: rotate(90deg);
 }
 
-/* TABLET / DESKTOP PEQUENO */
-@media (min-width: 768px) and (max-width: 1024px) {
-    #hora-minuto {
-        font-size: 6rem;
-    }
-    #segundo {
-        font-size: 2rem;
-    }
-    .data {
-        font-size: 1.5rem;
-    }
+.demo-description {
+  margin-top: 12px;
 
-    .time-controls button {
-        font-size: 0.9rem;
-        padding: 8px 12px;
-    }
+  color: var(--text-muted);
+
+  font-size: 0.72rem;
+
+  line-height: 1.5;
 }
 
-/* CELULARES */
-@media (max-width: 767px) {
-    #hora-minuto {
-        font-size: 12vw;
-    }
-    #segundo {
-        font-size: 6vw;
-    }
-    .data {
-        font-size: 5vw;
+.demo-options {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 8px;
+
+  margin-top: 15px;
+}
+
+.demo-weather-btn {
+  min-height: 72px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  color: var(--text-soft);
+
+  background: rgba(255, 255, 255, 0.035);
+
+  border: 1px solid var(--border);
+
+  border-radius: 9px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.demo-weather-btn i {
+  font-size: 1.15rem;
+}
+
+.demo-weather-btn span {
+  font-family: "Cinzel", serif;
+
+  font-size: 0.68rem;
+}
+
+.demo-weather-btn:hover {
+  transform: translateY(-2px);
+
+  color: var(--text-main);
+
+  border-color: var(--border-strong);
+
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.demo-weather-btn.active {
+  color: #f0d8d9;
+
+  border-color: rgba(217, 70, 77, 0.48);
+
+  background: linear-gradient(
+    145deg,
+    rgba(120, 16, 23, 0.32),
+    rgba(60, 8, 12, 0.42)
+  );
+
+  box-shadow: inset 0 0 20px rgba(217, 70, 77, 0.05);
+}
+
+.demo-footer {
+  margin-top: 15px;
+
+  padding-top: 12px;
+
+  border-top: 1px solid var(--border);
+}
+
+.demo-status {
+  margin-bottom: 9px;
+
+  color: var(--text-muted);
+
+  font-size: 0.66rem;
+
+  text-align: center;
+}
+
+.real-weather-btn {
+  width: 100%;
+
+  min-height: 40px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 8px 12px;
+
+  color: var(--text-main);
+
+  background: rgba(255, 255, 255, 0.04);
+
+  border: 1px solid var(--border);
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  font-family: "Cinzel", serif;
+
+  font-size: 0.66rem;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.real-weather-btn:hover {
+  transform: translateY(-1px);
+
+  border-color: var(--border-strong);
+
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status-bar {
+  width: 100%;
+
+  display: flex;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  flex-wrap: wrap;
+
+  margin-top: 10px;
+}
+
+.status-item {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 5px 8px;
+
+  color: var(--text-soft);
+
+  background: rgba(0, 0, 0, 0.32);
+
+  border: 1px solid var(--border);
+
+  border-radius: 999px;
+
+  font-size: 0.62rem;
+
+  backdrop-filter: blur(5px);
+}
+
+.status-item i {
+  color: var(--text-muted);
+}
+
+.status-item strong {
+  color: var(--text-main);
+
+  font-weight: 500;
+}
+
+/* =========================================================
+   MODO DEMONSTRAÇÃO ATIVO
+========================================================= */
+
+body.demo-mode .status-item:last-child {
+  border-color: rgba(217, 70, 77, 0.38);
+
+  background: rgba(75, 10, 14, 0.33);
+}
+
+body.demo-mode .status-item:last-child i {
+  color: var(--accent-light);
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
+  position: relative;
+
+  z-index: 10;
+
+  width: 100%;
+
+  min-height: 48px;
+
+  padding: 8px 4%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 18px;
+
+  color: var(--text-muted);
+
+  background: rgba(3, 4, 8, 0.64);
+
+  border-top: 1px solid var(--border);
+
+  font-size: 0.62rem;
+
+  backdrop-filter: blur(7px);
+}
+
+.footer span {
+  margin: 0 5px;
+
+  color: var(--accent-light);
+}
+
+/* =========================================================
+   NOITE
+========================================================= */
+
+body.period-night .background-layer.visible {
+  filter: brightness(0.7) saturate(0.88) contrast(1.04);
+}
+
+body.period-night .titulo-area,
+body.period-night .weather-card {
+  background: linear-gradient(
+    135deg,
+    rgba(3, 5, 10, 0.74),
+    rgba(3, 5, 10, 0.48)
+  );
+}
+
+/* =========================================================
+   TEMPESTADE
+========================================================= */
+
+body.weather-storm .background-layer.visible {
+  filter: brightness(0.6) saturate(0.8) contrast(1.1);
+}
+
+body.weather-storm .atmosphere-message {
+  color: #ddd6d2;
+
+  border-color: rgba(180, 190, 220, 0.3);
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+  body {
+    overflow-y: auto;
+  }
+
+  .interface {
+    min-height: auto;
+
+    padding: 18px 0 24px;
+  }
+
+  .top-panel {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .top-actions {
+    width: 100%;
+
+    align-items: stretch;
+  }
+
+  .titulo-area {
+    width: 100%;
+    max-width: none;
+  }
+
+  .weather-card {
+    flex: 1;
+  }
+
+  .demo-toggle-btn {
+    height: auto;
+
+    min-width: 120px;
+  }
+
+  .clock-section {
+    margin: 55px 0;
+  }
+
+  .controls {
+    grid-template-columns: 1fr;
+  }
+
+  .demo-panel {
+    top: auto;
+    right: 50%;
+    bottom: 20px;
+
+    transform: translateX(50%);
+
+    width: min(420px, 92vw);
+  }
+
+  @keyframes abrirPainelDemo {
+    from {
+      opacity: 0;
+
+      transform: translateX(50%) translateY(18px);
     }
 
-    .time-controls {
-        right: 10px;
-        bottom: 10px;
-        flex-direction: column;
-    }
+    to {
+      opacity: 1;
 
-    .time-controls button {
-        font-size: 4vw;
-        padding: 6px 10px;
+      transform: translateX(50%) translateY(0);
     }
+  }
+
+  .footer {
+    flex-direction: column;
+
+    text-align: center;
+  }
+}
+
+/* =========================================================
+   CELULAR
+========================================================= */
+
+@media (max-width: 600px) {
+  .interface {
+    width: 94%;
+  }
+
+  .titulo-area {
+    padding: 15px 17px;
+  }
+
+  .titulo-area h1 {
+    font-size: 2.2rem;
+  }
+
+  .top-actions {
+    flex-direction: column;
+  }
+
+  .weather-card {
+    width: 100%;
+
+    min-width: 0;
+
+    padding: 11px 13px;
+  }
+
+  .demo-toggle-btn {
+    width: 100%;
+
+    min-height: 42px;
+  }
+
+  .clock-section {
+    margin: 45px 0;
+  }
+
+  .hora-minuto {
+    font-size: clamp(3.7rem, 18vw, 6.2rem);
+  }
+
+  .segundo {
+    font-size: clamp(1.8rem, 8vw, 3rem);
+  }
+
+  .data-atual {
+    font-size: 0.84rem;
+  }
+
+  .atmosphere-message {
+    max-width: 92%;
+
+    font-size: 0.74rem;
+  }
+
+  .demo-panel {
+    width: min(94vw, 390px);
+
+    bottom: 14px;
+
+    padding: 15px;
+  }
+
+  .demo-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .demo-weather-btn {
+    min-height: 62px;
+  }
+
+  .status-bar {
+    align-items: stretch;
+
+    flex-direction: column;
+  }
+
+  .status-item {
+    justify-content: center;
+  }
+
+  .cloud {
+    min-width: 330px;
+
+    width: 68vw;
+  }
 }
